@@ -1,9 +1,14 @@
 interface Props {
   guessedLetters: string[];
   wordToGuess: string;
+  revealWord?: boolean;
 }
 
-export const HangmanWord = ({ guessedLetters, wordToGuess }: Props) => {
+export const HangmanWord = ({
+  guessedLetters,
+  wordToGuess,
+  revealWord = false,
+}: Props) => {
   return (
     <div
       style={{
@@ -17,7 +22,13 @@ export const HangmanWord = ({ guessedLetters, wordToGuess }: Props) => {
     >
       {wordToGuess.split('').map((letter: string, index: number) => (
         <span style={{ borderBottom: '.1em solid black' }} key={index}>
-          <span style={{ visibility: guessedLetters.includes(letter) ? 'visible' : 'hidden' }}>
+          <span
+            style={{
+              visibility:
+                guessedLetters.includes(letter) || revealWord ? 'visible' : 'hidden',
+              color: !guessedLetters.includes(letter) && revealWord ? 'red' : 'black',
+            }}
+          >
             {letter}
           </span>
         </span>

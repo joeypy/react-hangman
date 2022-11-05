@@ -1,6 +1,11 @@
 import styles from '../../styles/Keyboard.module.css';
 
-interface Props {}
+interface Props {
+  activeLetters: string[];
+  inactiveLetters: string[];
+  addGuessedLetters: (letter: string) => void;
+  disabled?: boolean;
+}
 
 const KEYS = [
   'a',
@@ -31,7 +36,12 @@ const KEYS = [
   'z',
 ];
 
-export const HangmanKeyboard = (props: Props) => {
+export const HangmanKeyboard = ({
+  disabled = false,
+  activeLetters,
+  inactiveLetters,
+  addGuessedLetters,
+}: Props) => {
   return (
     <div
       style={{
@@ -40,11 +50,22 @@ export const HangmanKeyboard = (props: Props) => {
         gap: '.5rem',
       }}
     >
-      {KEYS.map((key) => (
-        <button className={`${styles.btn}`} key={key}>
-          {key}
-        </button>
-      ))}
+      {KEYS.map((key) => {
+        const isActive = activeLetters.includes(key);
+        const isInactive = inactiveLetters.includes(key);
+        return (
+          <button
+            onClick={() => addGuessedLetters(key)}
+            disabled={isActive || isInactive || disabled}
+            className={`${styles.btn} ${isActive ? styles.active : ''} ${
+              isInactive ? styles.inactive : ''
+            } `}
+            key={key}
+          >
+            {key}
+          </button>
+        );
+      })}
     </div>
   );
 };
